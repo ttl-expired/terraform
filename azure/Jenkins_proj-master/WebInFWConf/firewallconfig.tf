@@ -186,6 +186,17 @@ resource "panos_nat_policy" "nat3" {
   dat_address           = "Azure-Int-LB"
   dat_port              = "8080"
 }
+resource "panos_nat_policy" "nat5" {
+  name                  = "SNAT"
+  source_zones          = ["${panos_zone.zone_trust.name}"]
+  destination_zone      = "${panos_zone.zone_untrust.name}"
+  service               = "any"
+  source_addresses      = ["any"]
+  destination_addresses = ["any"]
+  sat_type              = "dynamic-ip-and-port"
+  sat_address_type      = "interface-address"
+  sat_interface         = "${panos_ethernet_interface.eth1_1.name}"
+}
 
 resource "panos_virtual_router" "vr1" {
   name       = "default"
